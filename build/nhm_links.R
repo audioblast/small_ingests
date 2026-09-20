@@ -35,6 +35,18 @@ FIELDS <- c("occurrenceID", "scientificName", "collectionCode")
 OBJECT <- "https://data.nhm.ac.uk/object/"
 #The subject and the object are the same specimen
 EXACT_MATCH <- "http://www.w3.org/2004/02/skos/core#exactMatch"
+#Barcodes whose object in the Data Portal is not the specimen that carries the
+#barcode, so that BioAcoustica's specimen and that object are not the same
+#specimen and must not be linked. Each is left out until the Data Portal is
+#corrected, and each says why it is here:
+#
+#  010211851  NHMUK:ecatalogue:10075000 gives this barcode for a Metrioptera
+#             roeselii, but 010211823 to 010211861 are a run of Chorthippus in
+#             both collections, and the Portal's own Metrioptera roeselii run
+#             010210848, 849, 850, 852, 853 has a gap at 010210851, so the
+#             barcode on the Portal's record has a digit transposed. Reported
+#             2026-09-20; the specimens are to be checked in the collection.
+WRONG <- c("010211851")
 #Seconds to wait between requests, to go easy on the Data Portal
 PAUSE <- 0.2
 #Requests that say who is asking
@@ -120,6 +132,10 @@ for (i in seq_len(nrow(specimens))) {
   number <- row$catalogNumber
   if (!isBarcode(number)) {
     note(row, number, "not a barcode")
+    next
+  }
+  if (number %in% WRONG) {
+    note(row, number, "the Data Portal's object for it is another specimen")
     next
   }
 
