@@ -21,6 +21,8 @@ library(jsonlite)
 SPECIMENS <- "https://raw.githubusercontent.com/BioAcoustica/audioblast_ingest/main/specimens.csv"
 #The source that holds them, which the links give as their subjects' source
 SUBJECT_SOURCE <- "bio.acousti.ca"
+#The source that holds the objects, which the links give as their objects' source
+OBJECT_SOURCE <- "nhm"
 #The institution code of the specimens to look up
 INSTITUTION <- "NHMUK"
 
@@ -169,7 +171,7 @@ for (i in seq_len(nrow(specimens))) {
   }
 
   links[nrow(links) + 1, ] <- c("specimens", SUBJECT_SOURCE, row$id, EXACT_MATCH,
-                                "iri", "", paste0(OBJECT, object$occurrenceID), "",
+                                "iri", OBJECT_SOURCE, paste0(OBJECT, object$occurrenceID), "",
                                 paste(row$collectionCode, number))
 }
 
